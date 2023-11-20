@@ -12,8 +12,8 @@ int _printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
 
-    if (format == NULL) { /* checks if format string is NULL */
-        return 0;
+    if (!format) {
+        return -1;
     }
 
     i = 0;
