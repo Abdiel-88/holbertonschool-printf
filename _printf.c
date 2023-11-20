@@ -7,13 +7,14 @@
  * Return: Number of characters printed.
  */
 int _printf(const char *format, ...) {
+    int count = 0;
+    int i, j;
+    va_list args;
+
     if (!format) {
         return -1;
     }
 
-    int count = 0;
-    int i, j;
-    va_list args;
     va_start(args, format);
 
     for (i = 0; format[i]; i++) {
