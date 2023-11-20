@@ -12,10 +12,14 @@ int _printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
 
+    if (format == NULL) { /* checks if format string is NULL */
+        return 0;
+    }
+
     i = 0;
     while (format && format[i]) {
         if (format[i] == '%') {
-            i++;
+	  i++; /* checks the next character after % */
 
             switch (format[i]) {
                 case 'c': {
