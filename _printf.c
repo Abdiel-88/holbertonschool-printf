@@ -8,17 +8,17 @@
  * Return: Number of characters printed.
  */
 int _printf(const char *format, ...) {
-    int count = 0;
+   int count = 0;  /* initilizing variables */
     int i, j;
     va_list args;
 
-    if (!format) {
+    if (!format) { /* checks if Format string is NULL */
         return -1;
     }
 
     va_start(args, format);
 
-    for (i = 0; format[i]; i++) {
+    for (i = 0; format[i]; i++) { /* iterate through format string */
         if (format[i] == '%') {
             if (!format[i + 1]) {
 	      /* If '%' is the last character, do nothing and break the loop */
@@ -27,7 +27,7 @@ int _printf(const char *format, ...) {
 
             i++; /* Check the next character after % */
 
-            switch (format[i]) {
+            switch (format[i]) { /* switch cases for each specifier */
                 case 'c': {
                     char c = (char)va_arg(args, int);
                     write(1, &c, 1);
@@ -56,12 +56,12 @@ int _printf(const char *format, ...) {
                     break;
                 }
             }
-        } else {
+        } else {  /* Print regular characters */
             write(1, &format[i], 1);
             count++;
         }
     }
 
-    va_end(args);
+    va_end(args); /* finilize */
     return count;
 }
