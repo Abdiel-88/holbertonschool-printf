@@ -48,9 +48,11 @@ int _printf(const char *format, ...) {
                     break;
                 }
                 default: {
-		  /* When the format specifier is not valid, do nothing. */
-		  /* This effectively skips over the invalid format specifier. */
-                    continue;
+		  /* Print the '%' and the current character, then continue */
+                    write(1, &format[i - 1], 1);
+                    write(1, &format[i], 1);
+                    count += 2;
+                    break;
                 }
             }
         } else {
