@@ -6,12 +6,9 @@
  * @format: Format string containing the directives.
  * Return: Number of characters printed.
  */
-#include <stdarg.h>
-#include <unistd.h>
-
 int _printf(const char *format, ...) {
     int count = 0;
-    int i;
+    int i, j:
     va_list args;
 
     if (!format) {
@@ -34,7 +31,7 @@ int _printf(const char *format, ...) {
                 case 's': {
                     char *s = va_arg(args, char*);
                     if (!s) s = "(null)";
-                    for (int j = 0; s[j]; j++) {
+                    for (j = 0; s[j]; j++) {
                         write(1, &s[j], 1);
                         count++;
                     }
