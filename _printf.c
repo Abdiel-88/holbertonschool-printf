@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <unistd.h>
+#include "main.h"
 
 /**
  * _printf - Custom printf function to handle c, s, and % specifiers.
@@ -19,14 +20,9 @@ int _printf(const char *format, ...) {
 
     for (i = 0; format[i]; i++) {
         if (format[i] == '%') {
-            if (!format[i + 1] || (format[i + 1] != 'c' && format[i + 1] != 's' && format[i + 1] != '%')) {
-	      /* If '%' is not followed by a valid specifier, do nothing */
-                if (!format[i + 1]) {
-		  break; /* End of string */
-                } else {
-		  i++; /* Skip the invalid format specifier */
-                }
-                continue;
+            if (!format[i + 1]) {
+	      /* If '%' is the last character, do nothing and break the loop */
+                break;
             }
 
             i++; /* Check the next character after % */
