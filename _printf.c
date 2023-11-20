@@ -19,7 +19,12 @@ int _printf(const char *format, ...) {
 
     for (i = 0; format[i]; i++) {
         if (format[i] == '%') {
-	  i++; /* Check the next character after % */
+            if (!format[i + 1]) {
+	      /* If '%' is the last character, do nothing and break the loop */
+                break;
+            }
+
+            i++; /* Check the next character after % */
 
             switch (format[i]) {
                 case 'c': {
@@ -43,8 +48,8 @@ int _printf(const char *format, ...) {
                     break;
                 }
                 default: {
-		  /* When the format specifier is not valid, backtrack and continue. */
-		  i--; /* Backtrack to handle this as a non-format specifier */
+		  /* When the format specifier is not valid, do nothing. */
+		  /* This effectively skips over the invalid format specifier. */
                     continue;
                 }
             }
