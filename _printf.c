@@ -6,9 +6,12 @@
  * @format: Format string containing the directives.
  * Return: Number of characters printed.
  */
+#include <stdarg.h>
+#include <unistd.h>
+
 int _printf(const char *format, ...) {
     int count = 0;
-    int i, j;
+    int i;
     va_list args;
 
     if (!format) {
@@ -19,14 +22,7 @@ int _printf(const char *format, ...) {
 
     for (i = 0; format[i]; i++) {
         if (format[i] == '%') {
-            if (!format[i + 1]) {
-	      /* If '%' is the last character, print it and break the loop */
-                write(1, &format[i], 1);
-                count++;
-                break;
-            }
-
-            i++; /* Check the next character after % */
+	  i++; /* Check the next character after % */
 
             switch (format[i]) {
                 case 'c': {
@@ -38,8 +34,9 @@ int _printf(const char *format, ...) {
                 case 's': {
                     char *s = va_arg(args, char*);
                     if (!s) s = "(null)";
-                    for (j = 0; s[j]; j++, count++) {
+                    for (int j = 0; s[j]; j++) {
                         write(1, &s[j], 1);
+                        count++;
                     }
                     break;
                 }
@@ -49,11 +46,9 @@ int _printf(const char *format, ...) {
                     break;
                 }
                 default: {
-		  /* Print the '%' and the current character, then continue */
-                    write(1, &format[i - 1], 1);
-                    write(1, &format[i], 1);
-                    count += 2;
-                    break;
+		  /* When the format specifier is not valid, backtrack and continue. */
+		  i--; /* Backtrack to handle this as a non-format specifier */
+                    continue;
                 }
             }
         } else {
