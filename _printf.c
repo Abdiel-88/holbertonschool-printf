@@ -12,13 +12,14 @@ int _printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
 
-    for (int i = 0; format && format[i]; i++) {
+    i = 0;
+    while (format && format[i]) {
         if (format[i] == '%') {
-	  i++; /* Check the next character after % */
+            i++;
 
             switch (format[i]) {
                 case 'c': {
-		  char c = (char)va_arg(args, int); /* char is promoted to int in stdarg */
+                    char c = (char)va_arg(args, int);
                     write(1, &c, 1);
                     count++;
                     break;
@@ -26,8 +27,11 @@ int _printf(const char *format, ...) {
                 case 's': {
                     char *s = va_arg(args, char*);
                     if (s == NULL) s = "(null)";
-                    for (int j = 0; s[j]; j++, count++) {
+                    j = 0;
+                    while (s[j]) {
                         write(1, &s[j], 1);
+                        count++;
+                        j++;
                     }
                     break;
                 }
@@ -37,7 +41,6 @@ int _printf(const char *format, ...) {
                     break;
                 }
                 default: {
-		  /* Handle an unknown format specifier */
                     break;
                 }
             }
@@ -45,6 +48,7 @@ int _printf(const char *format, ...) {
             write(1, &format[i], 1);
             count++;
         }
+        i++;
     }
 
     va_end(args);
