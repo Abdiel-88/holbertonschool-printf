@@ -7,19 +7,25 @@
  * Return: Number of characters printed.
  */
 int _printf(const char *format, ...) {
+    if (!format) {
+        return -1;
+    }
+
     int count = 0;
     int i, j;
     va_list args;
     va_start(args, format);
 
-    if (!format) {
-        return -1;
-    }
-
-    i = 0;
-    while (format && format[i]) {
+    for (i = 0; format[i]; i++) {
         if (format[i] == '%') {
-	  i++; /* checks the next character after % */
+            if (!format[i + 1]) {
+	      /* If '%' is the last character, print it and break the loop */
+                write(1, &format[i], 1);
+                count++;
+                break;
+            }
+
+            i++; /* Check the next character after % */
 
             switch (format[i]) {
                 case 'c': {
@@ -30,12 +36,9 @@ int _printf(const char *format, ...) {
                 }
                 case 's': {
                     char *s = va_arg(args, char*);
-                    if (s == NULL) s = "(null)";
-                    j = 0;
-                    while (s[j]) {
+                    if (!s) s = "(null)";
+                    for (j = 0; s[j]; j++, count++) {
                         write(1, &s[j], 1);
-                        count++;
-                        j++;
                     }
                     break;
                 }
@@ -45,6 +48,10 @@ int _printf(const char *format, ...) {
                     break;
                 }
                 default: {
+		  /* Print the '%' and the current character, then continue */
+                    write(1, &format[i - 1], 1);
+                    write(1, &format[i], 1);
+                    count += 2;
                     break;
                 }
             }
@@ -52,7 +59,6 @@ int _printf(const char *format, ...) {
             write(1, &format[i], 1);
             count++;
         }
-        i++;
     }
 
     va_end(args);
