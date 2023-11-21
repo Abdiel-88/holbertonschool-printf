@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include "main.h"
+#include "limits.h"
 /**
 * printChar - prints to standard output
 * @letter: recive char
@@ -51,9 +52,14 @@ int printDeci(int num)
 
 	if (num < 0)/* prints a - if negative and turns num into positive*/
 	{
-		num = (num * -1);
 		write(1, "-", 1);
 		count++;
+		if (num == INT_MIN)/*deals with INT_MIN*/
+		{
+			write(1, "2147483648", 10);
+			return (count + 10);
+		}
+		num = -num; /*makes num positive*/
 	}
 	if (num > 9)/* save guard so recursion doesnt infinitly loop*/
 	{
