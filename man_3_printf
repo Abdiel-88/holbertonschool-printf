@@ -1,0 +1,68 @@
+.TH _PRINTF 1 _printf\ 1.0
+.SH NAME
+_printf \- format and prints data to standar output
+.SH SYNOPSIS
+.B _printf
+.BI \u FORMAT
+.RB [ARGUMENT]...
+.br
+.BR _printf
+.BI \u OPTIONS
+.SH DESCRIPTION
+.B _printf
+- prints to stdout according to ARGUMENT(s) and there FORMAT, or OPTION:
+.sp
+.B --help
+- display this help and exit
+.sp
+.B --version
+- outputs version information and exit
+.sp
+.B FORMAT
+outputs based on C speacial characters, and its own 
+.B integrated special characters:
+.sp
+\\" - single double quote
+.sp
+\\\\ - single backslash
+.sp
+\\a - alert (BEL)
+.sp
+\\b - backspace
+.sp
+\\c - produce no further output
+.sp
+\\e - escape
+.sp
+\\f - form feed
+.sp
+\\n - newline
+.sp
+\\r - carriage return
+.sp
+\\t - horizontal tab
+.sp
+\\v - vertical tab
+.sp
+.B %%
+- prints single %
+.sp
+.B %d, %i
+- prints the next int in the arguments
+.sp
+.B %s
+- prints the next char* in the arguments
+.sp
+.B %c
+- prints the next char in the arguments
+.SH AUTHOR
+Witten by
+.B Abdiel Feliciano
+&
+.B William Herrera
+.SH REPORTING BUGS
+any of the two contributors on: https://github.com/Abdiel-88/holbertonschool-printf
+.SH COPYRIGHT
+.B Holberton Coding School
+.SH MAN PAGE CREATED DATE
+November 2023
