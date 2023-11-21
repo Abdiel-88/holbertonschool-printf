@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "main.h"
 
 /**
@@ -7,61 +8,46 @@
  * @format: Format string containing the directives.
  * Return: Number of characters printed.
  */
-int _printf(const char *format, ...) {
-   int count = 0;  /* initilizing variables */
-    int i, j;
-    va_list args;
+int _printf(const char *format, ...)
+{
+	char *s;
+	int i, count = 0;
+	va_list args;
 
-    if (!format) { /* checks if Format string is NULL */
-        return -1;
-    }
-
-    va_start(args, format);
-
-    for (i = 0; format[i]; i++) { /* iterate through format string */
-        if (format[i] == '%') {
-            if (!format[i + 1]) {
-	      /* If '%' is the last character, do nothing and break the loop */
-                break;
-            }
-
-            i++; /* Check the next character after % */
-
-            switch (format[i]) { /* switch cases for each specifier */
-                case 'c': {
-                    char c = (char)va_arg(args, int);
-                    write(1, &c, 1);
-                    count++;
-                    break;
-                }
-                case 's': {
-                    char *s = va_arg(args, char*);
-                    if (!s) s = "(null)";
-                    for (j = 0; s[j]; j++) {
-                        write(1, &s[j], 1);
-                        count++;
-                    }
-                    break;
-                }
-                case '%': {
-                    write(1, &format[i], 1);
-                    count++;
-                    break;
-                }
-                default: {
-		  /* Print the '%' and the current character, then continue */
-                    write(1, &format[i - 1], 1);
-                    write(1, &format[i], 1);
-                    count += 2;
-                    break;
-                }
-            }
-        } else {  /* Print regular characters */
-            write(1, &format[i], 1);
-            count++;
-        }
-    }
-
-    va_end(args); /* finilize */
-    return count;
+	if (format == NULL)/* checks if Format string is NULL */
+		return (-1);
+	va_start(args, format);
+	for (i = 0; format[i] != '\0'; i++)
+	{/* iterate through format string */
+		if (format[i] == '%' && format[(i + 1)] != '\0')
+		{
+			switch (format[(i + 1)])
+			{/* switch cases for each specifier */
+				case 'c':
+					count = count + printChar((char)va_arg(args, int));
+					break;
+				case 's':
+					s = va_arg(args, char*);
+					if (s == NULL)/* checks if s is null */
+						s = "(null)";
+					count = count + printStr(s);
+					break;
+				case '%':
+					count = count + printPercent();
+					break;
+				case 'd':/* kinda of a OR statement*/
+				case 'i':/* d or i do the same */
+					count = count + printDeci(va_arg(args, int));
+					break;
+				default:/* Print the current character, then continue */
+					count = count + printReg(format[i]);
+					i--;/*evades the skip ahead only when default*/
+			}
+			i++;/* skips next index */
+		}
+		else if (format[i] != '%')/* Print regular characters */
+			count = count + printReg(format[i]);
+	}
+	va_end(args); /* finilize */
+	return (count);
 }
